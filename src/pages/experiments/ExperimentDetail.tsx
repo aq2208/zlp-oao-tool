@@ -122,7 +122,7 @@ export function ExperimentDetail() {
   const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(''), 2500) }
   const showError = (msg: string) => { setToastError(msg); setTimeout(() => setToastError(''), 4000) }
   const patch = <K extends keyof Experiment>(k: K, v: Experiment[K]) => setForm((f) => ({ ...f, [k]: v }))
-  const canEdit = form.status === 'draft' || isNew
+  const isDraft = form.status === 'draft' || isNew
 
   // The flow currently selected in the form
   const selectedFlow = form.flow_id ? getFlowById(form.flow_id) : undefined
@@ -157,9 +157,9 @@ export function ExperimentDetail() {
 
   const handleSave = () => {
     if (!form.name.trim()) { showError('Experiment name là bắt buộc'); return }
-    if (!form.flow_id) { showError('Phải chọn một Decision Flow'); return }
     if (!form.start_time || !form.end_time) { showError('Thời gian bắt đầu / kết thúc là bắt buộc'); return }
-    if (form.variants.length < 2) { showError('Phải chọn ít nhất 2 Rule Groups để so sánh'); return }
+    if (isDraft && !form.flow_id) { showError('Phải chọn một Decision Flow'); return }
+    if (isDraft && form.variants.length < 2) { showError('Phải chọn ít nhất 2 Rule Groups để so sánh'); return }
 
     if (isNew) {
       const newId = `exp-${Date.now()}`
@@ -212,15 +212,13 @@ export function ExperimentDetail() {
           {!isNew && (
             <button className="btn text-red-500 bg-red-50 hover:bg-red-100 border border-red-200 text-xs" onClick={() => setShowDeleteConfirm(true)}>Delete</button>
           )}
-          {canEdit && (
-            !editMode ? (
-              <button className="btn-primary" onClick={() => setEditMode(true)}>Edit</button>
-            ) : (
-              <>
-                <button className="btn-secondary" onClick={() => { if (isNew) navigate(-1); else { setEditMode(false); const f = getById(id!); if (f) setForm(JSON.parse(JSON.stringify(f))) } }}>Cancel</button>
-                <button className="btn-primary" onClick={handleSave}>Save</button>
-              </>
-            )
+          {!editMode ? (
+            <button className="btn-primary" onClick={() => setEditMode(true)}>Edit</button>
+          ) : (
+            <>
+              <button className="btn-secondary" onClick={() => { if (isNew) navigate(-1); else { setEditMode(false); const f = getById(id!); if (f) setForm(JSON.parse(JSON.stringify(f))) } }}>Cancel</button>
+              <button className="btn-primary" onClick={handleSave}>Save</button>
+            </>
           )}
         </div>
       }
@@ -276,7 +274,7 @@ export function ExperimentDetail() {
               </div>
             </div>
             <div className="card-body">
-              {editMode ? (
+              {(editMode && isDraft) ? (
                 <select
                   className="form-select"
                   value={form.flow_id || ''}
@@ -296,13 +294,14 @@ export function ExperimentDetail() {
                     ? <span className="text-[10px] font-mono font-semibold text-primary-700 bg-primary-50 px-1.5 py-0.5 rounded">{selectedFlow.bank_code}</span>
                     : form.flow_id ? <span className="text-xs text-ink-400 italic">General</span> : null
                   }
+                  {!isDraft && <span className="text-[10px] text-ink-400 italic ml-1">(locked after start)</span>}
                 </div>
               )}
             </div>
           </div>
 
-          {/* Rule Group Selector (edit mode) or Variant list (view mode) */}
-          {(editMode && selectedFlow) && (
+          {/* Rule Group Selector (draft edit mode only) */}
+          {(editMode && isDraft && selectedFlow) && (
             <div className="card">
               <div className="card-header">
                 <div>
@@ -362,8 +361,8 @@ export function ExperimentDetail() {
             </div>
           )}
 
-          {/* Variant view (non-edit mode, non-new) */}
-          {!editMode && form.variants.length > 0 && (
+          {/* Variant view: shown when not editing, or when editing a non-draft (rule groups locked) */}
+          {(!editMode || !isDraft) && form.variants.length > 0 && (
             <div className="card">
               <div className="card-header">
                 <h2>Variants</h2>
