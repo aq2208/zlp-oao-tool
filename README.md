@@ -1,73 +1,50 @@
-# React + TypeScript + Vite
+# OAO Hub Tool
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An internal configuration management tool for ZaloPay's OAO (Open Account Online) affiliation flow — built as a university capstone demo.
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+OAO Hub Tool allows ZaloPay's PO team and partner banks to configure and manage the full lifecycle of the OAO product: from UI/content setup to eligibility rule logic and A/B testing.
 
-## React Compiler
+## Modules
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Configurations** — Build the UI for each bank's OAO product (banners, cards, CTAs, rich-text content). Partner users see only their own bank's configs.
+- **Decision Flows** — Define the rule engine logic that determines user eligibility. Rule groups support drag-and-drop reordering, condition editing, and Segment Bundle references.
+- **Segment Bundles** — Reusable named sets of rule groups that can be referenced across multiple Decision Flows.
+- **A/B Testing** — Link experiments to a Decision Flow and compare Rule Groups as natural cohorts (no random traffic split). Tracks impressions, clicks, conversions, CTR, CVR, and revenue per variant.
+- **Analytics** — Overview dashboard for OAO performance metrics.
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React 19 + TypeScript
+- Vite
+- Zustand (state management)
+- React Router v7
+- Tailwind CSS v3
+- TipTap (rich text editor)
+- @dnd-kit (drag-and-drop)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Getting Started
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Other commands:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build    # Production build
+npm run lint     # ESLint
+npm run preview  # Preview production build
 ```
+
+## Demo Accounts
+
+| Email | Role | Access |
+|---|---|---|
+| admin@zalopay.vn | Admin | Full access |
+| po@zalopay.vn | PO | All modules |
+| partner@cathay.vn | Partner | Cathay configs only |
+
+> All data is in-memory and resets on page refresh — no backend required.
