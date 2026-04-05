@@ -96,12 +96,12 @@ export const mockExperiments: Experiment[] = [
     ],
   },
   {
-    // Completed experiment — MSB eligibility rule groups
+    // Stopped experiment — MSB eligibility rule groups
     id: 'exp-003',
     name: 'MSB — Loan eligibility segments Q4 2024',
     flow_id: 3,
     flow_name: 'TNC_MSB',
-    status: 'completed',
+    status: 'draft',
     start_time: '2024-10-01T00:00:00Z',
     end_time: '2024-12-31T00:00:00Z',
     created_at: '2024-09-25T00:00:00Z',

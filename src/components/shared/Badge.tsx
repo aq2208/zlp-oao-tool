@@ -9,7 +9,6 @@ const CLASS_MAP: Record<string, string> = {
   draft: 'badge-draft',
   running: 'badge-running',
   paused: 'badge-paused',
-  completed: 'badge-completed',
 }
 
 const LABEL_MAP: Record<string, string> = {
@@ -19,7 +18,6 @@ const LABEL_MAP: Record<string, string> = {
   draft: 'Draft',
   running: 'Running',
   paused: 'Paused',
-  completed: 'Completed',
 }
 
 export function Badge({ status }: { status: BadgeStatus }) {

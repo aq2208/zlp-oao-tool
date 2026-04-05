@@ -20,7 +20,7 @@ export function ExperimentList() {
   const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(''), 2500) }
   const showError = (msg: string) => { setToastError(msg); setTimeout(() => setToastError(''), 4000) }
 
-  const handleTransition = (id: string, action: 'start' | 'pause' | 'resume' | 'complete', successMsg: string) => {
+  const handleTransition = (id: string, action: 'start' | 'pause' | 'resume' | 'stop', successMsg: string) => {
     const err = transition(id, action)
     if (err) showError(err)
     else showToast(successMsg)
@@ -78,7 +78,6 @@ export function ExperimentList() {
           <option value="draft">Draft</option>
           <option value="running">Running</option>
           <option value="paused">Paused</option>
-          <option value="completed">Completed</option>
         </select>
         <span className="text-xs text-ink-400 ml-auto">{filtered.length} experiments</span>
       </div>
@@ -124,7 +123,7 @@ export function ExperimentList() {
                     <td>
                       <div className="flex gap-1 flex-wrap">
                         <button className="btn-ghost text-xs" onClick={() => navigate(`/experiments/${e.id}`)}>View</button>
-                        {e.status === 'draft' && (
+                        {e.status !== 'running' && e.status !== 'paused' && (
                           <button className="btn-ghost text-xs text-blue-600 hover:bg-blue-50" onClick={() => navigate(`/experiments/${e.id}`, { state: { editMode: true } })}>Edit</button>
                         )}
                         <button className="btn-ghost text-xs text-purple-600 hover:bg-purple-50" onClick={() => { clone(e.id); showToast(`Đã clone "${e.name}"`) }}>Clone</button>
@@ -138,7 +137,7 @@ export function ExperimentList() {
                           <button className="btn-ghost text-xs text-blue-600 hover:bg-blue-50" onClick={() => handleTransition(e.id, 'resume', 'Experiment đã resume')}>Resume</button>
                         )}
                         {(e.status === 'running' || e.status === 'paused') && (
-                          <button className="btn-ghost text-xs text-red-500 hover:bg-red-50" onClick={() => handleTransition(e.id, 'complete', 'Experiment đã complete')}>Stop</button>
+                          <button className="btn-ghost text-xs text-red-500 hover:bg-red-50" onClick={() => handleTransition(e.id, 'stop', 'Experiment đã stop và chuyển về draft')}>Stop</button>
                         )}
                         <button className="btn-ghost text-xs text-red-500 hover:bg-red-50" onClick={() => setDeleteTarget({ id: e.id, name: e.name, status: e.status })}>Delete</button>
                       </div>

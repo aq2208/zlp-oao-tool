@@ -11,7 +11,7 @@ interface ExperimentStore {
   remove: (id: string) => void
   clone: (id: string) => void
   /** Returns an error string if the transition is invalid, undefined on success */
-  transition: (id: string, action: 'start' | 'pause' | 'resume' | 'complete') => string | undefined
+  transition: (id: string, action: 'start' | 'pause' | 'resume' | 'stop') => string | undefined
 }
 
 export const useExperimentStore = create<ExperimentStore>((set, get) => ({
@@ -48,7 +48,7 @@ export const useExperimentStore = create<ExperimentStore>((set, get) => ({
       start:    { draft: 'running' },
       pause:    { running: 'paused' },
       resume:   { paused: 'running' },
-      complete: { running: 'completed', paused: 'completed' },
+      stop:     { running: 'draft', paused: 'draft' },
     }
 
     const exp = get().getById(id)

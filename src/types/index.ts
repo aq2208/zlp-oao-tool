@@ -36,7 +36,7 @@ export type FlowType = 'FIRST' | 'ALL'
 export type ContinueOnError = 'ALLOWED' | 'STOPPED'
 export type Operator = '=' | '!=' | '<' | '<=' | '>' | '>=' | 'in' | 'not_in' | 'exists' | 'contains' | 'trend_up'
 export type Logic = 'ALL' | 'ANY'
-export type ExperimentStatus = 'draft' | 'running' | 'paused' | 'completed'
+export type ExperimentStatus = 'draft' | 'running' | 'paused'
 export type BundleStatus = 'ACTIVE' | 'DRAFT'
 
 // ─── CTA ──────────────────────────────────────────────────────────────────────
