@@ -8,6 +8,7 @@ interface ExperimentStore {
   getById: (id: string) => Experiment | undefined
   save: (exp: Experiment) => void
   add: (exp: Experiment) => void
+  remove: (id: string) => void
   clone: (id: string) => void
   /** Returns an error string if the transition is invalid, undefined on success */
   transition: (id: string, action: 'start' | 'pause' | 'resume' | 'complete') => string | undefined
@@ -25,6 +26,8 @@ export const useExperimentStore = create<ExperimentStore>((set, get) => ({
     })),
 
   add: (exp) => set((state) => ({ experiments: [...state.experiments, exp] })),
+
+  remove: (id) => set((state) => ({ experiments: state.experiments.filter((e) => e.id !== id) })),
 
   clone: (id) => {
     const original = get().getById(id)

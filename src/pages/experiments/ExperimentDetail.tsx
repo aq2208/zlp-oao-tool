@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useExperimentStore } from '../../stores/useExperimentStore'
 import { useDecisionStore } from '../../stores/useDecisionStore'
 import { PageLayout } from '../../components/layout/PageLayout'
 import { Badge } from '../../components/shared/Badge'
+import { ConfirmDialog } from '../../components/shared/ConfirmDialog'
 import type { Experiment, Variant, RuleGroupObject } from '../../types'
 
 const EMPTY: Experiment = {
@@ -98,15 +99,17 @@ function MetricsDashboard({ experimentId }: { experimentId: string }) {
 export function ExperimentDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { getById, save, add, transition } = useExperimentStore()
+  const location = useLocation()
+  const { getById, save, add, remove, transition } = useExperimentStore()
   const { flows, getById: getFlowById } = useDecisionStore()
   const isNew = id === 'new'
 
   const [form, setForm] = useState<Experiment>(EMPTY)
-  const [editMode, setEditMode] = useState(isNew)
+  const [editMode, setEditMode] = useState(isNew || !!(location.state as { editMode?: boolean })?.editMode)
   const [toast, setToast] = useState('')
   const [toastError, setToastError] = useState('')
   const [activeTab, setActiveTab] = useState<'setup' | 'metrics'>('setup')
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   useEffect(() => {
     if (!isNew) {
@@ -206,6 +209,9 @@ export function ExperimentDetail() {
                 onClick={() => handleTransition('complete', 'Experiment đã complete')}>Stop</button>
             </>
           )}
+          {!isNew && (
+            <button className="btn text-red-500 bg-red-50 hover:bg-red-100 border border-red-200 text-xs" onClick={() => setShowDeleteConfirm(true)}>Delete</button>
+          )}
           {canEdit && (
             !editMode ? (
               <button className="btn-primary" onClick={() => setEditMode(true)}>Edit</button>
@@ -221,6 +227,16 @@ export function ExperimentDetail() {
     >
       {toast && <div className="fixed top-4 right-4 z-50 bg-ink-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg">{toast}</div>}
       {toastError && <div className="fixed top-16 right-4 z-50 bg-red-600 text-white text-sm px-4 py-2 rounded-lg shadow-lg max-w-xs">{toastError}</div>}
+
+      <ConfirmDialog
+        open={showDeleteConfirm}
+        title="Xóa Experiment"
+        message={`Bạn có chắc muốn xóa experiment "${form.name}"? Hành động này không thể hoàn tác.`}
+        confirmLabel="Xóa"
+        danger
+        onConfirm={() => { remove(id!); navigate('/experiments') }}
+        onCancel={() => setShowDeleteConfirm(false)}
+      />
 
       {/* Tabs */}
       {!isNew && (

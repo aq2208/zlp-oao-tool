@@ -4,16 +4,18 @@ import { useExperimentStore } from '../../stores/useExperimentStore'
 import { useDecisionStore } from '../../stores/useDecisionStore'
 import { PageLayout } from '../../components/layout/PageLayout'
 import { Badge } from '../../components/shared/Badge'
+import { ConfirmDialog } from '../../components/shared/ConfirmDialog'
 import type { ExperimentStatus } from '../../types'
 
 export function ExperimentList() {
-  const { experiments, transition, clone } = useExperimentStore()
+  const { experiments, transition, clone, remove } = useExperimentStore()
   const { flows } = useDecisionStore()
   const navigate = useNavigate()
   const [filterStatus, setFilterStatus] = useState<ExperimentStatus | ''>('')
   const [search, setSearch] = useState('')
   const [toast, setToast] = useState('')
   const [toastError, setToastError] = useState('')
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string; status: string } | null>(null)
 
   const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(''), 2500) }
   const showError = (msg: string) => { setToastError(msg); setTimeout(() => setToastError(''), 4000) }
@@ -22,6 +24,13 @@ export function ExperimentList() {
     const err = transition(id, action)
     if (err) showError(err)
     else showToast(successMsg)
+  }
+
+  const handleDelete = () => {
+    if (!deleteTarget) return
+    remove(deleteTarget.id)
+    setDeleteTarget(null)
+    showToast('Đã xóa experiment')
   }
 
   const filtered = experiments.filter((e) => {
@@ -42,6 +51,20 @@ export function ExperimentList() {
     >
       {toast && <div className="fixed top-4 right-4 z-50 bg-ink-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg">{toast}</div>}
       {toastError && <div className="fixed top-16 right-4 z-50 bg-red-600 text-white text-sm px-4 py-2 rounded-lg shadow-lg max-w-xs">{toastError}</div>}
+
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title="Xóa Experiment"
+        message={
+          deleteTarget?.status !== 'draft'
+            ? `Experiment "${deleteTarget?.name}" đang ở trạng thái ${deleteTarget?.status}. Bạn có chắc muốn xóa không?`
+            : `Bạn có chắc muốn xóa experiment "${deleteTarget?.name}"?`
+        }
+        confirmLabel="Xóa"
+        danger
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
 
       <div className="flex flex-wrap gap-3 items-center">
         <input
@@ -101,6 +124,9 @@ export function ExperimentList() {
                     <td>
                       <div className="flex gap-1 flex-wrap">
                         <button className="btn-ghost text-xs" onClick={() => navigate(`/experiments/${e.id}`)}>View</button>
+                        {e.status === 'draft' && (
+                          <button className="btn-ghost text-xs text-blue-600 hover:bg-blue-50" onClick={() => navigate(`/experiments/${e.id}`, { state: { editMode: true } })}>Edit</button>
+                        )}
                         <button className="btn-ghost text-xs text-purple-600 hover:bg-purple-50" onClick={() => { clone(e.id); showToast(`Đã clone "${e.name}"`) }}>Clone</button>
                         {e.status === 'draft' && (
                           <button className="btn-ghost text-xs text-green-600 hover:bg-green-50" onClick={() => handleTransition(e.id, 'start', 'Experiment đã start')}>Start</button>
@@ -114,6 +140,7 @@ export function ExperimentList() {
                         {(e.status === 'running' || e.status === 'paused') && (
                           <button className="btn-ghost text-xs text-red-500 hover:bg-red-50" onClick={() => handleTransition(e.id, 'complete', 'Experiment đã complete')}>Stop</button>
                         )}
+                        <button className="btn-ghost text-xs text-red-500 hover:bg-red-50" onClick={() => setDeleteTarget({ id: e.id, name: e.name, status: e.status })}>Delete</button>
                       </div>
                     </td>
                   </tr>
