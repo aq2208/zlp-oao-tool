@@ -53,7 +53,7 @@ export const mockDecisionFlows: DecisionFlow[] = [
     flow_type: 'FIRST',
     produce_execution_result: false,
     continue_on_error: 'STOPPED',
-    description: 'Rule điều kiện riêng cho Cathay — quyết định user có được tiếp tục hay không',
+    description: 'Rule điều kiện riêng cho Cathay, quyết định user có được tiếp tục hay không',
     rule_groups: [
       {
         id: 'rg-003',
@@ -143,7 +143,7 @@ export const mockDecisionFlows: DecisionFlow[] = [
     flow_type: 'FIRST',
     produce_execution_result: false,
     continue_on_error: 'ALLOWED',
-    description: 'VPBank credit card — đang chuẩn bị',
+    description: 'VPBank credit card, đang chuẩn bị',
     rule_groups: [],
     created_at: '2025-03-25T00:00:00Z',
     updated_at: '2025-03-25T00:00:00Z',

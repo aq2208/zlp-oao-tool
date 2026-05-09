@@ -30,7 +30,7 @@ function evaluateFlow(flow: DecisionFlow, input: TryRuleInput) {
   })
 
   const firstMatch = breakdown.find((b) => b.matched)
-  return { breakdown, matched: !!firstMatch, result_value: firstMatch?.action ?? 'No match — default response' }
+  return { breakdown, matched: !!firstMatch, result_value: firstMatch?.action ?? 'No match (default response)' }
 }
 
 export function TryRuleModal({ flow, onClose }: TryRuleModalProps) {
@@ -96,7 +96,7 @@ export function TryRuleModal({ flow, onClose }: TryRuleModalProps) {
           </div>
 
           <button className="btn-primary w-full justify-center" onClick={handleSubmit} disabled={!input.zalopayId}>
-            Submit — Evaluate Rule
+            Evaluate Rule
           </button>
 
           {/* Results */}

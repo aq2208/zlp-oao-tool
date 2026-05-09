@@ -165,7 +165,7 @@ export function ConfigDetail() {
       setShowImport(false)
       setImportJson('')
       setImportError('')
-      showToast('Import thành công — Nhớ bấm Save để lưu')
+      showToast('Import thành công. Nhớ bấm Save để lưu')
     } catch {
       setImportError('JSON không hợp lệ (parse error)')
     }
@@ -306,7 +306,7 @@ export function ConfigDetail() {
 
       {/* ③ Page 1 — Base Card + Explored Card */}
       <div className="card">
-        <div className="card-header"><h2>③ Page 1 Info — Card (Trang 1)</h2></div>
+        <div className="card-header"><h2>③ Page 1 Info: Card (Trang 1)</h2></div>
         <div className="card-body space-y-6">
           {/* Base Card */}
           <div>
@@ -389,7 +389,7 @@ export function ConfigDetail() {
       <div className="card">
         <div className="card-header">
           <div className="flex items-center gap-3">
-            <h2>④ Page 2 Info — Detail Block (Trang 2)</h2>
+            <h2>④ Page 2 Info: Detail Block (Trang 2)</h2>
             <Toggle value={form.detail_block.enabled} onChange={(v) => patch('detail_block', { ...form.detail_block, enabled: v })} disabled={!editMode} />
             {!form.detail_block.enabled && <span className="text-xs text-orange-500">Tắt: flow skip thẳng Trang 1 → Trang 3</span>}
           </div>
@@ -421,7 +421,7 @@ export function ConfigDetail() {
       <div className="card">
         <div className="card-header">
           <div>
-            <h2>⑥ Partner Content — Header + Nội dung chính (Trang 3)</h2>
+            <h2>⑥ Partner Content: Header + Nội dung chính (Trang 3)</h2>
             <p className="text-xs text-ink-400 mt-0.5">Trang landing chi tiết hiển thị quyền lợi, điều kiện cho user</p>
           </div>
         </div>
@@ -437,7 +437,7 @@ export function ConfigDetail() {
           </div>
           <ImageUpload label="Header Image * (logo ngang của brand, bắt buộc khi ACTIVE)" value={form.header_image_url} onChange={(url) => patch('header_image_url', url)} disabled={!editMode} />
           <div>
-            <label className="form-label">Main Content * (quyền lợi + điều kiện — rich text)</label>
+            <label className="form-label">Main Content * (quyền lợi + điều kiện, rich text)</label>
             <RichTextEditor value={form.main_content} onChange={(v) => patch('main_content', v)} disabled={!editMode} placeholder="Nhập quyền lợi nổi bật và điều kiện chương trình..." />
           </div>
         </div>

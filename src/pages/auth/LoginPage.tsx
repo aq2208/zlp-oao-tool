@@ -3,9 +3,9 @@ import { useAuthStore, MOCK_USERS } from '../../stores/useAuthStore'
 import type { User } from '../../types'
 
 const ROLE_LABELS: Record<string, string> = {
-  admin: 'Admin — Toàn quyền',
-  po: 'Product Owner — Xem & chỉnh sửa',
-  partner: 'Partner — Xem configs của mình',
+  admin: 'Admin: Toàn quyền',
+  po: 'Product Owner: Xem & chỉnh sửa',
+  partner: 'Partner: Xem configs của mình',
 }
 
 const ROLE_COLORS: Record<string, string> = {

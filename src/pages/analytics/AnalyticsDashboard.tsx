@@ -88,7 +88,7 @@ export function AnalyticsDashboard() {
   return (
     <PageLayout
       title="Analytics Dashboard"
-      subtitle="Hiệu suất từng Partner Configuration — 30 ngày gần nhất"
+      subtitle="Hiệu suất từng Partner Configuration, 30 ngày gần nhất"
     >
       {/* KPI Summary */}
       <div className="grid grid-cols-4 gap-4">
@@ -187,7 +187,7 @@ export function AnalyticsDashboard() {
         <div className="card border-l-4" style={{ borderLeftColor: COLORS[selected.config_id] ?? '#64748b' }}>
           <div className="card-header">
             <div>
-              <h2>Daily Breakdown — {selected.bank_name}</h2>
+              <h2>Daily Breakdown: {selected.bank_name}</h2>
               <p className="text-xs text-ink-400 mt-0.5">7 ngày gần nhất</p>
             </div>
             <button className="btn-ghost text-xs" onClick={() => setSelectedId(null)}>Đóng</button>

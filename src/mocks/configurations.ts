@@ -82,7 +82,7 @@ export const mockConfigurations: MainConfiguration[] = [
   {
     id: 'cfg-002',
     bank_code: 'MSB',
-    name: 'Maritime Bank — Vay tiêu dùng',
+    name: 'Maritime Bank: Vay tiêu dùng',
     status: 'ACTIVE',
     category: 'loan',
     extra_title: '',
@@ -94,7 +94,7 @@ export const mockConfigurations: MainConfiguration[] = [
     },
     freeze_banner: {
       enabled: true,
-      title: 'MSB — Vay tiêu dùng',
+      title: 'MSB: Vay tiêu dùng',
       subtitle: 'Lãi suất từ 1.2%/tháng',
     },
     base_card: {

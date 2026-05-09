@@ -252,7 +252,7 @@ export function ExperimentDetail() {
             <div className="card-body grid grid-cols-2 gap-4">
               <div className="col-span-2">
                 <label className="form-label">Experiment Name *</label>
-                <input className="form-input" value={form.name} onChange={(e) => patch('name', e.target.value)} disabled={!editMode} placeholder="VD: Cathay — Which segment converts better?" />
+                <input className="form-input" value={form.name} onChange={(e) => patch('name', e.target.value)} disabled={!editMode} placeholder="VD: Cathay: Which segment converts better?" />
               </div>
               <div>
                 <label className="form-label">Start Time *</label>
@@ -270,7 +270,7 @@ export function ExperimentDetail() {
             <div className="card-header">
               <div>
                 <h2>Decision Flow</h2>
-                <p className="text-xs text-ink-400 mt-0.5">Chọn flow cần so sánh — experiment sẽ quan sát user thuộc các Rule Groups trong flow này</p>
+                <p className="text-xs text-ink-400 mt-0.5">Chọn flow cần so sánh. Experiment sẽ quan sát user thuộc các Rule Groups trong flow này.</p>
               </div>
             </div>
             <div className="card-body">
@@ -307,7 +307,7 @@ export function ExperimentDetail() {
                 <div>
                   <h2>Chọn Rule Groups để so sánh</h2>
                   <p className="text-xs text-ink-400 mt-0.5">
-                    Chọn ít nhất 2 Rule Groups — mỗi group sẽ trở thành một Variant.
+                    Chọn ít nhất 2 Rule Groups. Mỗi group sẽ trở thành một Variant.
                     <span className={`ml-2 font-medium ${form.variants.length >= 2 ? 'text-green-600' : 'text-red-500'}`}>
                       Đã chọn: {form.variants.length}
                     </span>

@@ -33,7 +33,7 @@ export function DecisionList() {
   return (
     <PageLayout
       title="Decision Tool"
-      subtitle="Quản lý decision flows — quyết định user nào thấy partner nào"
+      subtitle="Quản lý decision flows, quyết định user nào thấy partner nào"
       actions={
         <div className="flex gap-2">
           <button className="btn-secondary text-xs" onClick={() => showToast('Đã refresh danh sách')}>Refresh</button>

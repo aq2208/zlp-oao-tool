@@ -97,7 +97,7 @@ export function ConfigList() {
                 <tr key={c.id}>
                   <td>
                     {(() => {
-                      const [bankName, productDesc] = c.name.split('—').map((s) => s.trim())
+                      const [bankName, productDesc] = c.name.split(':').map((s) => s.trim())
                       return (
                         <>
                           <p className="font-medium text-ink-900">{bankName}</p>

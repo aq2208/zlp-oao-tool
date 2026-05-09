@@ -132,22 +132,22 @@ export function DecisionDetail() {
           <div>
             <label className="form-label">Flow Type *</label>
             <select className="form-select" value={form.flow_type} onChange={(e) => patch('flow_type', e.target.value as FlowType)} disabled={!editMode}>
-              <option value="FIRST">FIRST — Trả kết quả rule đầu tiên match</option>
-              <option value="ALL">ALL — Evaluate hết tất cả rule</option>
+              <option value="FIRST">FIRST: Trả kết quả rule đầu tiên match</option>
+              <option value="ALL">ALL: Evaluate hết tất cả rule</option>
             </select>
           </div>
           <div>
             <label className="form-label">Continue On Error *</label>
             <select className="form-select" value={form.continue_on_error} onChange={(e) => patch('continue_on_error', e.target.value as ContinueOnError)} disabled={!editMode}>
-              <option value="ALLOWED">ALLOWED — Tiếp tục nếu 1 rule lỗi</option>
-              <option value="STOPPED">STOPPED — Dừng ngay</option>
+              <option value="ALLOWED">ALLOWED: Tiếp tục nếu 1 rule lỗi</option>
+              <option value="STOPPED">STOPPED: Dừng ngay</option>
             </select>
           </div>
           <div className="col-span-2 flex items-center gap-3">
             <label className="form-label mb-0">Produce Execution Result</label>
             <label className="flex items-center gap-2 cursor-pointer text-sm text-ink-600">
               <input type="checkbox" checked={form.produce_execution_result} onChange={(e) => patch('produce_execution_result', e.target.checked)} disabled={!editMode} className="w-4 h-4" />
-              {form.produce_execution_result ? 'ON — Lưu kết quả evaluate vào DB' : 'OFF — Chỉ trả response, không lưu'}
+              {form.produce_execution_result ? 'ON: Lưu kết quả evaluate vào DB' : 'OFF: Chỉ trả response, không lưu'}
             </label>
           </div>
           <div className="col-span-2">
