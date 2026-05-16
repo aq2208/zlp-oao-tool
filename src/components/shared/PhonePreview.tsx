@@ -32,7 +32,7 @@ function ImgPlaceholder({ src, alt, className }: { src: string; alt?: string; cl
    ═══════════════════════════════════════════════════════════════ */
 const HERO_HEIGHT = 325
 
-function CardView({ config }: { config: MainConfiguration }) {
+function CardView({ config, onNavigate }: { config: MainConfiguration; onNavigate: (tab: 'detail' | 'landing') => void }) {
   const [freezeVisible, setFreezeVisible] = useState(false)
   const card = config.base_card
   const hero = config.hero_banner
@@ -51,8 +51,8 @@ function CardView({ config }: { config: MainConfiguration }) {
       {/* Freeze Banner — overlaid at top, appears only after hero scrolls away */}
       {config.freeze_banner.enabled && freezeVisible && (
         <div
-          className="absolute top-0 left-0 right-0 z-20 flex items-center gap-2 px-3 py-2 border-b border-white/20"
-          style={{ background: 'rgba(255,255,255,0.65)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }}
+          className="absolute top-0 left-0 right-0 z-50 flex items-center gap-2 px-3 py-2 border-b border-white/20"
+          style={{ background: 'rgba(255,255,255,0.70)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
         >
           <div className="w-8 h-8 rounded-lg bg-white/40 shrink-0 overflow-hidden">
             <ImgPlaceholder src={hero.image_url} alt="" className="w-full h-full" />
@@ -74,7 +74,7 @@ function CardView({ config }: { config: MainConfiguration }) {
 
         {/* Hero Banner — full-height image with gradient text overlay at bottom */}
         {hero.enabled && (
-          <div className="relative w-full overflow-hidden z-10" style={{ height: 325, boxShadow: '0 6px 20px rgba(0,0,0,0.14)' }}>
+          <div className="relative w-full overflow-hidden z-10 cursor-pointer" style={{ height: 325, boxShadow: '0 6px 20px rgba(0,0,0,0.14)' }} onClick={() => onNavigate('detail')}>
             {hero.image_url ? (
               <img
                 src={hero.image_url}
@@ -114,13 +114,14 @@ function CardView({ config }: { config: MainConfiguration }) {
 
           {/* Partner Card */}
           <div
-            className="relative rounded-xl shadow-md"
+            className="relative rounded-xl shadow-md cursor-pointer"
             style={{
               backgroundColor: cardBg,
               backgroundImage: card.bg_image_url ? `url(${card.bg_image_url})` : undefined,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
             }}
+            onClick={() => onNavigate('detail')}
           >
             {/* Top-right badge — hugs the card's top-right corner */}
             {explored.badge && (
@@ -186,6 +187,7 @@ function CardView({ config }: { config: MainConfiguration }) {
                   <button
                     className="shrink-0 text-[9px] font-bold text-white px-2.5 py-1.5 rounded-full shadow-md whitespace-nowrap"
                     style={{ backgroundColor: '#2563eb' }}
+                    onClick={(e) => { e.stopPropagation(); onNavigate('landing') }}
                   >
                     {cta.button_name || 'Mở ngay'}
                   </button>
@@ -237,12 +239,12 @@ function CardView({ config }: { config: MainConfiguration }) {
 /* ═══════════════════════════════════════════════════════════════
    Tab 2: Detail Block — mô phỏng Trang 2 (quyền lợi + điều kiện)
    ═══════════════════════════════════════════════════════════════ */
-function DetailView({ config }: { config: MainConfiguration }) {
+function DetailView({ config, onNavigate }: { config: MainConfiguration; onNavigate: (tab: 'landing') => void }) {
   const block = config.detail_block
 
   if (!block.enabled) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-center px-6 space-y-2">
+      <div className="flex flex-col items-center justify-center h-full text-center px-6 space-y-2 bg-white">
         <div className="w-10 h-10 rounded-full bg-surface-100 flex items-center justify-center">
           <svg className="w-5 h-5 text-ink-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
@@ -254,71 +256,57 @@ function DetailView({ config }: { config: MainConfiguration }) {
     )
   }
 
-  return (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto overscroll-contain">
-        <div className="space-y-0">
+  const richCls = '[&_h2]:text-[12px] [&_h2]:font-bold [&_h2]:text-ink-900 [&_h2]:mb-2 [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:mt-1 [&_li]:text-[10px] [&_li]:leading-snug [&_li]:text-ink-900 [&_li]:mb-1 [&_li::marker]:text-ink-900'
 
-          {/* Top image — full bleed */}
+  return (
+    <div className="h-full bg-[#f5f7fa] px-2 pt-2 pb-6 flex flex-col">
+      {/* Vertical card — pb-6 leaves visible gap at bottom of phone */}
+      <div className="flex-1 bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col min-h-0">
+        <div className="flex-1 overflow-y-auto overscroll-contain">
+
+          {/* Top image — fixed height = ~1/4 of card */}
           {block.top_image_url ? (
-            <img
-              src={block.top_image_url}
-              alt="detail"
-              className="w-full object-cover"
-              style={{ maxHeight: 130 }}
-              onError={(e) => { (e.target as HTMLImageElement).src = 'https://placehold.co/400x130/e2e8f0/94a3b8?text=Detail+Image' }}
-            />
+            <img src={block.top_image_url} alt="detail" className="w-full object-cover" style={{ height: 110 }}
+              onError={(e) => { (e.target as HTMLImageElement).src = 'https://placehold.co/235x110/e2e8f0/94a3b8?text=Top+Image' }} />
           ) : (
-            <div className="w-full h-[90px] bg-surface-100 flex items-center justify-center">
+            <div className="w-full flex items-center justify-center bg-surface-100" style={{ height: 110 }}>
               <span className="text-[9px] text-ink-300">Top Image chưa nhập</span>
             </div>
           )}
 
-          <div className="px-3 py-3 space-y-3">
-            {/* Content Primary */}
-            {block.content_primary ? (
-              <div className="bg-white rounded-xl p-3 shadow-sm border border-surface-50">
-                <RichContent
-                  html={block.content_primary}
-                  className="[&_h2]:text-[12px] [&_h2]:font-bold [&_h2]:text-ink-900 [&_h2]:mb-1.5 [&_h2]:mt-2 first:[&_h2]:mt-0 [&_ul]:pl-3 [&_li]:text-[10px] [&_li]:leading-snug [&_li]:text-ink-700 [&_li]:mb-0.5 [&_h3]:text-[11px] [&_h3]:font-semibold [&_h3]:text-ink-800"
-                />
-              </div>
-            ) : (
-              <div className="bg-white rounded-xl p-3 border border-dashed border-surface-200">
-                <span className="text-[9px] text-ink-300">Content Primary chưa nhập...</span>
-              </div>
-            )}
-
-            {/* Content Secondary */}
-            {block.content_secondary && (
-              <div className="bg-white rounded-xl p-3 shadow-sm border border-surface-50">
-                <RichContent
-                  html={block.content_secondary}
-                  className="[&_h2]:text-[12px] [&_h2]:font-bold [&_h2]:text-ink-900 [&_h2]:mb-1.5 [&_h2]:mt-2 first:[&_h2]:mt-0 [&_ul]:pl-3 [&_li]:text-[10px] [&_li]:leading-snug [&_li]:text-ink-600 [&_li]:mb-0.5"
-                />
-              </div>
-            )}
-
-            {/* Bottom padding for CTA */}
-            <div className="h-12" />
+          {/* Content primary */}
+          <div className="px-3 pt-3 pb-2">
+            {block.content_primary
+              ? <RichContent html={block.content_primary} className={richCls} />
+              : <span className="text-[9px] text-ink-300">Content Primary chưa nhập...</span>}
           </div>
-        </div>
-      </div>
 
-      {/* CTA sticky bottom */}
-      {config.cta_list.length > 0 && (
-        <div className="shrink-0 px-3 py-2 bg-white border-t border-surface-100 shadow-[0_-4px_12px_rgba(0,0,0,0.06)]">
-          {config.cta_list.slice(0, 1).map((cta) => (
-            <button
-              key={cta.id}
-              className="w-full py-2.5 rounded-2xl text-[12px] font-bold text-white shadow-md"
-              style={{ backgroundColor: config.base_card.bg_color || '#1d4ed8' }}
-            >
-              {cta.button_name || 'Mở ngay'}
-            </button>
-          ))}
+          {/* Divider */}
+          {block.content_secondary && <div className="mx-3 border-t border-surface-200" />}
+
+          {/* Content secondary */}
+          {block.content_secondary && (
+            <div className="px-3 pt-3 pb-2">
+              <RichContent html={block.content_secondary} className={richCls} />
+            </div>
+          )}
+
+          <div className="h-4" />
         </div>
-      )}
+
+        {/* CTA — pill, centered, narrower than full width */}
+        {config.cta_list.length > 0 && (
+          <div className="shrink-0 px-6 pb-3 pt-2">
+            <button
+              className="w-full py-2.5 rounded-full text-[12px] font-bold text-white"
+              style={{ backgroundColor: config.base_card.bg_color || '#1d4ed8' }}
+              onClick={() => onNavigate('landing')}
+            >
+              {config.cta_list[0].button_name || 'Mở ngay'}
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
@@ -328,42 +316,49 @@ function DetailView({ config }: { config: MainConfiguration }) {
    ═══════════════════════════════════════════════════════════════ */
 function LandingView({ config }: { config: MainConfiguration }) {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-[#f5f7fa]">
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto overscroll-contain">
-        <div className="px-3 pt-3 pb-2 space-y-3">
+        <div className="px-3 pt-10 pb-2 space-y-3">
 
-          {/* Header logo */}
-          <div className="flex justify-center">
-            {config.header_image_url
-              ? <img src={config.header_image_url} alt="header" className="h-10 object-contain max-w-[140px]" onError={(e) => { (e.target as HTMLImageElement).src = 'https://placehold.co/140x40/e2e8f0/94a3b8?text=LOGO' }} />
-              : <div className="h-10 w-28 bg-surface-100 rounded-lg flex items-center justify-center text-[9px] text-ink-300">Logo</div>
-            }
+          {/* Header + content merged into one connected card */}
+          <div className="rounded-2xl overflow-hidden shadow-sm">
+            {/* Header — gradient from saturated blue to white */}
+            <div
+              className="px-4 py-4 flex flex-col items-center gap-2"
+              style={{ background: 'linear-gradient(to bottom, #93c5fd, #ffffff)' }}
+            >
+              {config.header_image_url ? (
+                <img src={config.header_image_url} alt="logo" className="h-6 object-contain max-w-[120px]"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+              ) : (
+                <div className="h-6 w-20 bg-blue-100 rounded flex items-center justify-center text-[8px] text-blue-300">Logo</div>
+              )}
+              <p className="text-[12px] font-bold text-ink-900 text-center leading-snug">
+                {config.header_title || <span className="text-ink-300">Tiêu đề chưa nhập...</span>}
+              </p>
+            </div>
+            {/* Main content — white, flows directly below header */}
+            <div className="bg-white px-3 pb-3">
+              <RichContent
+                html={config.main_content}
+                className="[&_h2]:text-[11px] [&_h2]:font-bold [&_h2]:text-ink-900 [&_h2]:mb-1.5 [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:mt-1 [&_li]:text-[9px] [&_li]:leading-snug [&_li]:text-ink-900 [&_li]:mb-0.5 [&_li::marker]:text-ink-900"
+              />
+            </div>
           </div>
 
-          {/* Header title */}
-          <h2 className="text-[14px] font-bold text-ink-900 text-center leading-snug">
-            {config.header_title || <span className="text-ink-300">Tiêu đề chưa nhập...</span>}
-          </h2>
-
-          {/* Main content */}
-          <div className="bg-white rounded-xl p-3 shadow-sm border border-surface-50">
-            <RichContent
-              html={config.main_content}
-              className="[&_h2]:text-[12px] [&_h2]:font-bold [&_h2]:text-ink-900 [&_h2]:mb-1 [&_ul]:pl-3 [&_li]:text-[10px] [&_li]:leading-snug [&_li]:text-ink-700 [&_li]:mb-0.5"
-            />
-          </div>
-
-          {/* Guidances */}
+          {/* Steps — horizontal scrollable row */}
           {config.guidances.length > 0 && (
-            <div>
-              <div className="grid grid-cols-2 gap-2">
+            <div className="overflow-x-auto -mx-3 px-3">
+              <div className="flex gap-2 pb-1" style={{ width: 'max-content' }}>
                 {config.guidances.map((g) => (
-                  <div key={g.id} className="space-y-1">
-                    <p className="text-[10px] font-bold text-ink-900">Bước {g.order}</p>
-                    <p className="text-[9px] text-ink-500 leading-tight">{g.content || '—'}</p>
-                    <div className="rounded-lg overflow-hidden">
-                      <ImgPlaceholder src={g.image_url} alt={`step ${g.order}`} className="w-full h-[72px]" />
+                  <div key={g.id} className="bg-white rounded-xl overflow-hidden flex flex-col shrink-0" style={{ width: 140 }}>
+                    <div className="px-2.5 pt-2.5 pb-1">
+                      <p className="text-[10px] font-bold text-ink-900">Bước {g.order}</p>
+                      <p className="text-[8px] text-ink-900 leading-tight mt-0.5 line-clamp-2">{g.content || '—'}</p>
+                    </div>
+                    <div className="overflow-hidden">
+                      <ImgPlaceholder src={g.image_url} alt={`step ${g.order}`} className="w-full h-[170px]" />
                     </div>
                   </div>
                 ))}
@@ -375,8 +370,8 @@ function LandingView({ config }: { config: MainConfiguration }) {
           {config.sub_content_list.length > 0 && (
             <div className="space-y-1.5">
               {config.sub_content_list.map((sc) => (
-                <div key={sc.id} className="flex items-center gap-1.5 text-[10px] text-blue-600 underline">
-                  <svg className="w-3 h-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div key={sc.id} className="flex items-center gap-1.5 text-[9px] text-ink-900">
+                  <svg className="w-2.5 h-2.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                   </svg>
                   {sc.label || sc.zpa_link}
@@ -385,23 +380,19 @@ function LandingView({ config }: { config: MainConfiguration }) {
             </div>
           )}
 
-          {/* Padding for CTA */}
-          <div className="h-14" />
+          <div className="h-2" />
         </div>
       </div>
 
-      {/* CTA sticky bottom */}
+      {/* Sticky CTA */}
       {config.cta_list.length > 0 && (
-        <div className="shrink-0 px-3 py-2 bg-white border-t border-surface-100 shadow-[0_-4px_12px_rgba(0,0,0,0.06)]">
-          {config.cta_list.slice(0, 1).map((cta) => (
-            <button
-              key={cta.id}
-              className="w-full py-2.5 rounded-2xl text-[12px] font-bold text-white shadow-md"
-              style={{ backgroundColor: config.base_card.bg_color || '#1d4ed8' }}
-            >
-              {cta.button_name || 'Mở ngay'}
-            </button>
-          ))}
+        <div className="shrink-0 px-3 py-2.5 bg-white border-t border-surface-100 shadow-[0_-4px_12px_rgba(0,0,0,0.06)]">
+          <button
+            className="w-full py-2.5 rounded-xl text-[12px] font-bold text-white"
+            style={{ backgroundColor: config.base_card.bg_color || '#1d4ed8' }}
+          >
+            {config.cta_list[0].button_name || 'Mở ngay'}
+          </button>
         </div>
       )}
     </div>
@@ -420,7 +411,7 @@ const TAB_LABELS: Record<string, string> = {
 export function PhonePreview({ config }: PhonePreviewProps) {
   const [tab, setTab] = useState<'card' | 'detail' | 'landing'>('card')
 
-  const showNavBar = tab !== 'card'
+  const showNavBar = false
 
   return (
     <div className="flex flex-col items-center gap-3 select-none">
@@ -487,11 +478,11 @@ export function PhonePreview({ config }: PhonePreviewProps) {
         {/* Top nav bar — only for detail / landing tabs */}
         {showNavBar && (
           <div className="absolute top-7 left-0 right-0 h-9 flex items-center justify-between px-3 z-10 bg-white/80 backdrop-blur-sm border-b border-surface-100/60">
-            <button className="w-5 h-5 text-ink-400">
+            <button className="w-5 h-5 text-ink-400" onClick={() => setTab(tab === 'landing' ? 'detail' : 'card')}>
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
             </button>
             <span className="text-[10px] font-semibold text-ink-700 truncate max-w-[120px]">
-              {tab === 'detail' ? 'Chi tiết sản phẩm' : config.header_title || config.name || 'Chi tiết'}
+              {config.header_title || config.name || 'Chi tiết'}
             </span>
             <button className="w-5 h-5 text-ink-400">
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -501,21 +492,25 @@ export function PhonePreview({ config }: PhonePreviewProps) {
 
         {/* Content area — starts right below status bar for card tab, below nav bar otherwise */}
         <div className={`absolute ${showNavBar ? 'top-16' : 'top-7'} left-0 right-0 bottom-0 overflow-hidden bg-[#f5f7fa]`}>
-          {tab === 'card' && <CardView config={config} />}
-          {tab === 'detail' && <DetailView config={config} />}
+          {tab === 'card' && <CardView config={config} onNavigate={setTab} />}
+          {tab === 'detail' && <DetailView config={config} onNavigate={setTab} />}
           {tab === 'landing' && <LandingView config={config} />}
         </div>
 
-        {/* Close button — rendered last so it's always on top of the hero banner */}
-        {tab === 'card' && (
-          <div className="absolute top-7 right-3 z-40 flex items-center justify-center w-6 h-6">
-            <div className="w-5 h-5 rounded-full bg-black/25 flex items-center justify-center">
-              <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </div>
+        {/* Floating close button — all tabs */}
+        <div
+          className="absolute top-7 right-3 z-40 flex items-center justify-center w-6 h-6 cursor-pointer"
+          onClick={() => {
+            if (tab === 'detail') setTab('card')
+            else if (tab === 'landing') setTab(config.detail_block.enabled ? 'detail' : 'card')
+          }}
+        >
+          <div className="w-5 h-5 rounded-full bg-black/25 flex items-center justify-center">
+            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </div>
-        )}
+        </div>
       </div>
 
     </div>
