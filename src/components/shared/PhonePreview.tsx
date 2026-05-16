@@ -370,12 +370,18 @@ function LandingView({ config }: { config: MainConfiguration }) {
           {config.sub_content_list.length > 0 && (
             <div className="space-y-1.5">
               {config.sub_content_list.map((sc) => (
-                <div key={sc.id} className="flex items-center gap-1.5 text-[9px] text-ink-900">
+                <a
+                  key={sc.id}
+                  href={sc.zpa_link || sc.zpi_link || '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-[9px] text-blue-600 underline cursor-pointer"
+                >
                   <svg className="w-2.5 h-2.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                   </svg>
                   {sc.label || sc.zpa_link}
-                </div>
+                </a>
               ))}
             </div>
           )}
