@@ -58,6 +58,8 @@ export interface HeroBanner {
   enabled: boolean
   title: string
   subtitle: string
+  title_color: string
+  subtitle_color: string
   image_url: string
 }
 

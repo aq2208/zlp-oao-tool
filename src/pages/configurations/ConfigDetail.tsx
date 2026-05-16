@@ -20,7 +20,7 @@ const EMPTY_CONFIG: MainConfiguration = {
   status: 'DRAFT',
   category: 'bank_account',
   extra_title: '',
-  hero_banner: { enabled: true, title: '', subtitle: '', image_url: '' },
+  hero_banner: { enabled: true, title: '', subtitle: '', title_color: '#ffffff', subtitle_color: '#ffffff', image_url: '' },
   freeze_banner: { enabled: true, title: '', subtitle: '' },
   base_card: { enabled: true, title: '', subtitle: '', title_color: '#ffffff', subtitle_color: '#e2e8f0', content_color: '#cbd5e1', bg_color: '#1d4ed8', bg_transparent: false, bg_image_url: '', logo_left_url: '', logo_right_url: '', top_right_shape_url: '' },
   explored_card: { enabled: true, badge: '', description: '' },
@@ -269,6 +269,14 @@ export function ConfigDetail() {
                   <input className="form-input" maxLength={70} value={form.hero_banner.subtitle} onChange={(e) => patch('hero_banner', { ...form.hero_banner, subtitle: e.target.value })} disabled={!editMode} />
                   <p className="char-count">{form.hero_banner.subtitle.length}/70</p>
                 </div>
+                <div>
+                  <label className="form-label">Title Color</label>
+                  <ColorPicker value={form.hero_banner.title_color || '#ffffff'} onChange={(v) => patch('hero_banner', { ...form.hero_banner, title_color: v })} disabled={!editMode} />
+                </div>
+                <div>
+                  <label className="form-label">Subtitle Color</label>
+                  <ColorPicker value={form.hero_banner.subtitle_color || '#ffffff'} onChange={(v) => patch('hero_banner', { ...form.hero_banner, subtitle_color: v })} disabled={!editMode} />
+                </div>
                 <div className="col-span-2">
                   <ImageUpload label="Banner Image *" value={form.hero_banner.image_url} onChange={(url) => patch('hero_banner', { ...form.hero_banner, image_url: url })} disabled={!editMode} />
                 </div>
@@ -352,9 +360,6 @@ export function ConfigDetail() {
               </div>
               <div>
                 <ImageUpload label="Logo trái (brand logo)" value={form.base_card.logo_left_url} onChange={(url) => patch('base_card', { ...form.base_card, logo_left_url: url })} disabled={!editMode} />
-              </div>
-              <div>
-                <ImageUpload label="Logo mờ phải (watermark)" value={form.base_card.logo_right_url} onChange={(url) => patch('base_card', { ...form.base_card, logo_right_url: url })} disabled={!editMode} />
               </div>
               <div className="col-span-2">
                 <ImageUpload label="Top Right Shape (hình trang trí góc trên phải card)" value={form.base_card.top_right_shape_url} onChange={(url) => patch('base_card', { ...form.base_card, top_right_shape_url: url })} disabled={!editMode} />

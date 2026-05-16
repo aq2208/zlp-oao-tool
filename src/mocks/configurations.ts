@@ -12,6 +12,8 @@ export const mockConfigurations: MainConfiguration[] = [
       enabled: true,
       title: 'Mở tài khoản Cathay',
       subtitle: 'Nhận ngay ưu đãi lãi suất cao nhất thị trường',
+      title_color: '#ffffff',
+      subtitle_color: '#ffffff',
       image_url: 'https://placehold.co/800x300/1d4ed8/ffffff?text=Cathay+Banner',
     },
     freeze_banner: {
@@ -90,6 +92,8 @@ export const mockConfigurations: MainConfiguration[] = [
       enabled: true,
       title: 'Vay tiêu dùng MSB',
       subtitle: 'Giải ngân trong 24 giờ, lãi suất từ 1.2%/tháng',
+      title_color: '#ffffff',
+      subtitle_color: '#ffffff',
       image_url: 'https://placehold.co/800x300/059669/ffffff?text=MSB+Banner',
     },
     freeze_banner: {
@@ -162,7 +166,7 @@ export const mockConfigurations: MainConfiguration[] = [
     status: 'DRAFT',
     category: 'credit_card',
     extra_title: '',
-    hero_banner: { enabled: false, title: '', subtitle: '', image_url: '' },
+    hero_banner: { enabled: false, title: '', subtitle: '', title_color: '#ffffff', subtitle_color: '#ffffff', image_url: '' },
     freeze_banner: { enabled: false, title: '', subtitle: '' },
     base_card: {
       enabled: true,
