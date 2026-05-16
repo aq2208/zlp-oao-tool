@@ -320,7 +320,6 @@ export function ConfigDetail() {
           <div>
             <div className="flex items-center gap-3 mb-3">
               <h3>Base Card</h3>
-              <Toggle value={form.base_card.enabled} onChange={(v) => patch('base_card', { ...form.base_card, enabled: v })} disabled={!editMode} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>

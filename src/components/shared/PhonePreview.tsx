@@ -45,6 +45,8 @@ function CardView({ config, onNavigate }: { config: MainConfiguration; onNavigat
     setFreezeVisible(e.currentTarget.scrollTop >= HERO_HEIGHT)
   }
 
+  const toNextPage = () => onNavigate(config.detail_block.enabled ? 'detail' : 'landing')
+
   return (
     <div className="flex flex-col h-full relative">
 
@@ -74,7 +76,7 @@ function CardView({ config, onNavigate }: { config: MainConfiguration; onNavigat
 
         {/* Hero Banner — full-height image with gradient text overlay at bottom */}
         {hero.enabled && (
-          <div className="relative w-full overflow-hidden z-10 cursor-pointer" style={{ height: 325, boxShadow: '0 6px 20px rgba(0,0,0,0.14)' }} onClick={() => onNavigate('detail')}>
+          <div className="relative w-full overflow-hidden z-10 cursor-pointer" style={{ height: 325, boxShadow: '0 6px 20px rgba(0,0,0,0.14)' }} onClick={toNextPage}>
             {hero.image_url ? (
               <img
                 src={hero.image_url}
@@ -121,7 +123,7 @@ function CardView({ config, onNavigate }: { config: MainConfiguration; onNavigat
               backgroundSize: 'cover',
               backgroundPosition: 'center',
             }}
-            onClick={() => onNavigate('detail')}
+            onClick={toNextPage}
           >
             {/* Top-right badge — hugs the card's top-right corner */}
             {explored.badge && (
