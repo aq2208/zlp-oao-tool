@@ -114,7 +114,7 @@ function CardView({ config }: { config: MainConfiguration }) {
 
           {/* Partner Card */}
           <div
-            className="relative rounded-2xl shadow-md"
+            className="relative rounded-xl shadow-md"
             style={{
               backgroundColor: cardBg,
               backgroundImage: card.bg_image_url ? `url(${card.bg_image_url})` : undefined,
@@ -122,10 +122,10 @@ function CardView({ config }: { config: MainConfiguration }) {
               backgroundPosition: 'center',
             }}
           >
-            {/* Top-left badge — sticker at card corner */}
+            {/* Top-right badge — hugs the card's top-right corner */}
             {explored.badge && (
-              <div className="absolute -top-1 left-2.5 z-20">
-                <span className="text-[8px] font-bold text-white px-2 py-0.5 rounded-sm leading-tight block" style={{ backgroundColor: '#ef4444' }}>
+              <div className="absolute top-0 right-0 z-10">
+                <span className="text-[8px] font-bold text-white px-2 py-0.5 leading-tight block" style={{ backgroundColor: '#ef4444', borderRadius: '0 12px 0 8px' }}>
                   {explored.badge}
                 </span>
               </div>
@@ -141,7 +141,7 @@ function CardView({ config }: { config: MainConfiguration }) {
               />
             )}
 
-            <div className="px-2.5 pt-2.5 pb-2.5 relative z-10">
+            <div className="px-2.5 pt-2.5 pb-2.5 relative z-20">
               {/* Logo + title row */}
               <div className="flex items-start gap-1.5 mb-1.5">
                 {/* Logo in white rounded box */}
@@ -158,7 +158,7 @@ function CardView({ config }: { config: MainConfiguration }) {
                   )}
                 </div>
                 {/* Title + subtitle */}
-                <div className="flex-1 min-w-0" style={{ paddingRight: card.top_right_shape_url ? 44 : 0 }}>
+                <div className="flex-1 min-w-0" style={{ paddingRight: explored.badge || card.top_right_shape_url ? 52 : 0 }}>
                   {card.title && (
                     <p className="text-[9px] font-bold leading-tight truncate" style={{ color: card.title_color || '#fff' }}>
                       {card.title}
@@ -174,11 +174,11 @@ function CardView({ config }: { config: MainConfiguration }) {
 
               {/* Benefits + CTA button */}
               <div className="flex items-end gap-1.5">
-                <div className="flex-1 min-w-0">
+                <div className="flex-1 min-w-0" style={{ color: card.content_color || '#ffffff' }}>
                   {explored.enabled && explored.description && (
                     <RichContent
                       html={explored.description}
-                      className="[&_ul]:pl-2.5 [&_li]:text-[9px] [&_li]:leading-snug [&_li]:mb-px"
+                      className="[&_ul]:list-disc [&_ul]:pl-4 [&_ul]:my-0 [&_li]:text-[9px] [&_li]:leading-snug [&_li]:mb-px [&_li]:text-current [&_li::marker]:text-current"
                     />
                   )}
                 </div>
@@ -202,9 +202,9 @@ function CardView({ config }: { config: MainConfiguration }) {
             { color: '#e3f2fd', label: 'Mở tài khoản', sub: 'MSB', badge: 'Tặng 100K' },
             { color: '#fce4ec', label: 'Thẻ ghi nợ', sub: 'TCB', badge: 'Miễn phí năm đầu' },
           ].map((ghost) => (
-            <div key={ghost.label} className="relative rounded-2xl shadow-sm opacity-70" style={{ backgroundColor: ghost.color }}>
-              <div className="absolute -top-1 left-2.5 z-10">
-                <span className="text-[8px] font-bold text-white px-1.5 py-0.5 rounded-sm" style={{ backgroundColor: '#6b7280' }}>{ghost.badge}</span>
+            <div key={ghost.label} className="relative rounded-xl shadow-sm opacity-70" style={{ backgroundColor: ghost.color }}>
+              <div className="absolute top-0 right-0 z-10">
+                <span className="text-[8px] font-bold text-white px-1.5 py-0.5 leading-tight block" style={{ backgroundColor: '#6b7280', borderRadius: '0 12px 0 8px' }}>{ghost.badge}</span>
               </div>
               <div className="px-2.5 pt-2.5 pb-2.5">
                 <div className="flex items-start gap-1.5 mb-1.5">
