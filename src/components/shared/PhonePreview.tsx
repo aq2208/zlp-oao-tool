@@ -319,31 +319,40 @@ function LandingView({ config }: { config: MainConfiguration }) {
     <div className="flex flex-col h-full bg-[#f5f7fa]">
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto overscroll-contain">
-        <div className="px-3 pt-10 pb-2 space-y-3">
+        <div className="px-3 pt-6 pb-2 space-y-3">
 
-          {/* Header + content merged into one connected card */}
-          <div className="rounded-2xl overflow-hidden shadow-sm">
-            {/* Header — gradient from saturated blue to white */}
-            <div
-              className="px-4 py-4 flex flex-col items-center gap-2"
-              style={{ background: 'linear-gradient(to bottom, #93c5fd, #ffffff)' }}
-            >
-              {config.header_image_url ? (
-                <img src={config.header_image_url} alt="logo" className="h-6 object-contain max-w-[120px]"
-                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
-              ) : (
-                <div className="h-6 w-20 bg-blue-100 rounded flex items-center justify-center text-[8px] text-blue-300">Logo</div>
-              )}
-              <p className="text-[12px] font-bold text-ink-900 text-center leading-snug">
-                {config.header_title || <span className="text-ink-300">Tiêu đề chưa nhập...</span>}
-              </p>
+          {/* Header + content merged — badge drops from above */}
+          <div className="relative mt-4">
+            {/* Badge — white pill hanging above the card */}
+            <div className="absolute -top-4 left-0 right-0 flex justify-center z-10">
+              <div className="bg-white rounded-full shadow-md px-3 py-1 flex items-center gap-1.5">
+                {config.header_image_url ? (
+                  <img src={config.header_image_url} alt="logo" className="h-5 object-contain max-w-[100px]"
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+                ) : (
+                  <span className="text-[8px] font-semibold text-ink-500">{config.name}</span>
+                )}
+              </div>
             </div>
-            {/* Main content — white, flows directly below header */}
-            <div className="bg-white px-3 pb-3">
-              <RichContent
-                html={config.main_content}
-                className="[&_h2]:text-[11px] [&_h2]:font-bold [&_h2]:text-ink-900 [&_h2]:mb-1.5 [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:mt-1 [&_li]:text-[9px] [&_li]:leading-snug [&_li]:text-ink-900 [&_li]:mb-0.5 [&_li::marker]:text-ink-900"
-              />
+
+            {/* Card body */}
+            <div className="rounded-2xl shadow-sm overflow-hidden">
+              {/* Header gradient — top padding makes room for badge */}
+              <div
+                className="px-4 pt-6 pb-4 flex flex-col items-center"
+                style={{ background: 'linear-gradient(to bottom, #93c5fd, #ffffff)' }}
+              >
+                <p className="text-[12px] font-bold text-ink-900 text-center leading-snug">
+                  {config.header_title || <span className="text-ink-300">Tiêu đề chưa nhập...</span>}
+                </p>
+              </div>
+              {/* Main content */}
+              <div className="bg-white px-3 pb-3">
+                <RichContent
+                  html={config.main_content}
+                  className="[&_h2]:text-[11px] [&_h2]:font-bold [&_h2]:text-ink-900 [&_h2]:mb-1.5 [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:mt-1 [&_li]:text-[9px] [&_li]:leading-snug [&_li]:text-ink-900 [&_li]:mb-0.5 [&_li::marker]:text-ink-900"
+                />
+              </div>
             </div>
           </div>
 
